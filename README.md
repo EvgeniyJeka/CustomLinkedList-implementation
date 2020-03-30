@@ -6,3 +6,6 @@ https://github.com/EvgeniyJeka/CustomLinkedList-tested-with-Cucumber/tree/master
 
 Gherkin script:
 https://github.com/EvgeniyJeka/CustomLinkedList-tested-with-Cucumber/blob/master/src/test/java/tests/CustomLinkedList.feature
+
+Test steps implementation (Java), aka Step Definitions:
+https://github.com/EvgeniyJeka/CustomLinkedList-tested-with-Cucumber/blob/master/src/test/java/tests/Stepdefs.java
