@@ -1,10 +1,10 @@
 Feature: Custom Linked List
 
-	#.get(x)
-	Scenario Outline: Get element by index - numbers
-	Given List of 5 numbers
-	When Saving the element with index <index> of type <type> 
-	Then Actual value of the saved element is identical to the <expected> <type> value.
+#.get(x)
+Scenario Outline: Get element by index - numbers
+Given List of 5 numbers
+When Saving the element with index <index> of type <type> 
+Then Actual value of the saved element is identical to the <expected> <type> value.
 	
   Examples:
   |index|expected|type	|
