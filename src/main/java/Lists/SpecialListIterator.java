@@ -7,11 +7,11 @@ public class SpecialListIterator<T> implements ListIterator<T> {
 	CustomLinkedList<T> iteratedList;
 	LinkedListNode<T> currentNode;
 	int index;
-	int size;
-	
+	final int size;
+
 	//Used only for special case handling.
 	LinkedListNode<T> prevNode;
-	
+
 
 	public SpecialListIterator(CustomLinkedList<T> customLinkedList) {
 		this.iteratedList = customLinkedList;
@@ -56,22 +56,19 @@ public class SpecialListIterator<T> implements ListIterator<T> {
 	@Override
 	public T previous() {
 
-		T result = null;
+		T result;
 
 		if (this.currentNode == null) {
-			
+
 			//Covering edge-case: following the previous iteration current node is null
 			this.currentNode = this.prevNode;
 			result = this.currentNode.getNodeValue();
-			index--;
-		}
-
-		else {
+		} else {
 			//Regular case
 			result = this.currentNode.previous.getNodeValue();
 			this.currentNode = this.currentNode.previous;
-			this.index--;
 		}
+		index--;
 
 		return result;
 

@@ -5,7 +5,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
+@SuppressWarnings({"unchecked", "unused"})
 public class CustomLinkedList<T> implements List<T> {
 
 	LinkedListNode<T> first;
@@ -44,22 +46,13 @@ public class CustomLinkedList<T> implements List<T> {
 		return result;
 	}
 
-	public static void main(String[] args) {
-
-	
-
-	}
-
 	@Override
 	public boolean removeIf(Predicate<? super T> filter) {
-		CustomLinkedList<T> removalList = new CustomLinkedList<T>();
 
-		for (T element : this) {
-			if (filter.test(element))
-				removalList.add(element);
-		}
+		CustomLinkedList<T> removalList = this.stream().filter(filter::test)
+				.collect(Collectors.toCollection(CustomLinkedList::new));
 
-		boolean result = removalList.size() > 0 ? true : false;
+		boolean result = removalList.size() > 0;
 
 		removalList.forEach(x -> this.remove(x));
 
@@ -73,12 +66,11 @@ public class CustomLinkedList<T> implements List<T> {
 		if (this.first == null)
 			return "";
 
-		String result = new String();
+		String result = "";
 
-		Iterator<T> iterator = this.iterator();
-
-		while (iterator.hasNext())
-			result = result + iterator.next() + " ";
+		for (T t : this) {
+			result = result + t + " ";
+		}
 
 		return result;
 
@@ -123,20 +115,18 @@ public class CustomLinkedList<T> implements List<T> {
 				this.sizeIncrease();
 				result = true;
 
-			}
-
-			else {
+			} else {
 
 				// Adding new node to the list, linking it to the last node in the list.
 				LinkedListNode<T> addedNode = LinkedListNode.makeNodeOf(addedElement, this.last);
-				
+
 				LinkedListNode<T> connectNode = this.first;
-				
+
 				//Special case - element is added to a sublist
 				if(this.masterList!=null && this.last.next!=null) {
 					addedNode.next = this.last.next;
 					this.last.next.previous = addedNode;
-					
+
 				}
 
 				while (connectNode.next != null && connectNode!=this.last)
@@ -165,9 +155,7 @@ public class CustomLinkedList<T> implements List<T> {
 
 		if (index >= this.size()) {
 			throw new IndexOutOfBoundsException();
-		}
-
-		else if (index < 0) {
+		} else if (index < 0) {
 			throw new IllegalArgumentException();
 		}
 
@@ -181,17 +169,11 @@ public class CustomLinkedList<T> implements List<T> {
 
 		if (index > this.size()) {
 			throw new IndexOutOfBoundsException();
-		}
-
-		else if (index < 0 || element == null) {
+		} else if (index < 0 || element == null) {
 			throw new IllegalArgumentException();
-		}
-
-		else if (index == this.size) {
+		} else if (index == this.size) {
 			this.add(element);
-		}
-
-		else if (index > 0) {
+		} else if (index > 0) {
 
 			LinkedListNode<T> beforeAddedNode = this.nodeByIndex(index - 1);
 			LinkedListNode<T> afterAddedNode = this.nodeByIndex(index);
@@ -205,19 +187,17 @@ public class CustomLinkedList<T> implements List<T> {
 
 			this.sizeIncrease();
 
-		}
-
-		else if (index == 0) {
+		} else if (index == 0) {
 
 			LinkedListNode<T> addedNode = LinkedListNode.makeNodeOf(element, null);
 			addedNode.next = this.first;
 			this.first = addedNode;
 			this.sizeIncrease();
-			
+
 			if(this.masterList!=null && addedNode.previous == null) {
 				this.masterList.first = addedNode;
 			}
-				
+
 
 		}
 
@@ -230,13 +210,9 @@ public class CustomLinkedList<T> implements List<T> {
 
 		if (index >= this.size()) {
 			throw new IndexOutOfBoundsException();
-		}
-
-		else if (index < 0) {
+		} else if (index < 0) {
 			throw new IllegalArgumentException();
-		}
-
-		else if (index > 0) {
+		} else if (index > 0) {
 
 			LinkedListNode<T> beforeRemovedNode = this.nodeByIndex(index - 1);
 			LinkedListNode<T> afterRemovedNode = beforeRemovedNode.next.next;
@@ -254,9 +230,7 @@ public class CustomLinkedList<T> implements List<T> {
 
 			this.sizeDecrease();
 
-		}
-
-		else if (index == 0) {
+		} else if (index == 0) {
 
 			LinkedListNode<T> removedNote = this.first;
 			result = removedNote.getNodeValue();
@@ -272,7 +246,7 @@ public class CustomLinkedList<T> implements List<T> {
 				if (removedNote.previous != null) {
 					removedNote.previous.next = this.first;
 				}
-				
+
 				if(this.masterList!= null)
 					this.masterList.first = this.first;
 
@@ -305,20 +279,17 @@ public class CustomLinkedList<T> implements List<T> {
 
 	@Override
 	public Iterator<T> iterator() {
-		Iterator<T> iterator = new CustomLinkedListIterator<T>(this);
-		return iterator;
+		return new CustomLinkedListIterator<T>(this);
 	}
 
 	@Override
 	public ListIterator<T> listIterator() {
-		ListIterator<T> listIterator = new SpecialListIterator<T>(this);
-		return listIterator;
+		return new SpecialListIterator<T>(this);
 	}
 
 	@Override
 	public ListIterator<T> listIterator(int index) {
-		ListIterator<T> listIterator = new SpecialListIterator<T>(this, index);
-		return listIterator;
+		return new SpecialListIterator<T>(this, index);
 	}
 
 	@Override
@@ -348,7 +319,7 @@ public class CustomLinkedList<T> implements List<T> {
 		for (Object obj : cleanThem)
 			this.remove(obj);
 
-		return this.size() < initialSize ? true : false;
+		return this.size() < initialSize;
 	}
 
 	@Override
@@ -358,7 +329,7 @@ public class CustomLinkedList<T> implements List<T> {
 
 		this.removeIf(x -> !toRetain.contains(x));
 
-		return this.size() < initialSize ? true : false;
+		return this.size() < initialSize;
 	}
 
 	@Override
@@ -388,7 +359,7 @@ public class CustomLinkedList<T> implements List<T> {
 
 	@Override
 	public boolean contains(Object o) {
-		return this.indexOf(o) > -1 ? true : false;
+		return this.indexOf(o) > -1;
 	}
 
 	@Override
@@ -425,7 +396,7 @@ public class CustomLinkedList<T> implements List<T> {
 
 		addCollection.forEach(x -> this.add(x));
 
-		return this.size() < initialSize ? true : false;
+		return this.size() < initialSize;
 	}
 
 	@Override
@@ -438,7 +409,7 @@ public class CustomLinkedList<T> implements List<T> {
 			index++;
 		}
 
-		return this.size() < initialSize ? true : false;
+		return this.size() < initialSize;
 	}
 
 	@Override
@@ -446,7 +417,6 @@ public class CustomLinkedList<T> implements List<T> {
 
 		if (this.masterList == null) {
 			this.forEach(x -> this.remove(x));
-			this.size = 0;
 		}
 
 		// Clearing a sublist
@@ -456,9 +426,9 @@ public class CustomLinkedList<T> implements List<T> {
 
 			this.first = null;
 			this.last = null;
-			this.size = 0;
 
 		}
+		this.size = 0;
 
 	}
 
@@ -467,9 +437,7 @@ public class CustomLinkedList<T> implements List<T> {
 
 		if (index > this.size()) {
 			throw new IndexOutOfBoundsException();
-		}
-
-		else if (element == null) {
+		} else if (element == null) {
 			throw new IllegalArgumentException();
 		}
 
@@ -578,7 +546,7 @@ public class CustomLinkedList<T> implements List<T> {
 			this.swapNodes(i, range - i - 1);
 		}
 	}
-	
+
 	public LinkedListNode<T> getLast(){
 		return this.last;
 	}

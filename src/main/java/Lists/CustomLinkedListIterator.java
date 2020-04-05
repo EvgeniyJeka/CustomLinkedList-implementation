@@ -2,9 +2,9 @@ package Lists;
 
 import java.util.Iterator;
 
-public class CustomLinkedListIterator<T> implements Iterator<T>{
-	
-	CustomLinkedList<T> iteratedList;
+public class CustomLinkedListIterator<T> implements Iterator<T> {
+
+	final CustomLinkedList<T> iteratedList;
 	LinkedListNode<T> currentNode;
 
 	public CustomLinkedListIterator(CustomLinkedList<T> customLinkedList) {
