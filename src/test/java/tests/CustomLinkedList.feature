@@ -347,7 +347,6 @@ Then Actual value of the saved element is identical to the <expected> <type> val
   	 *   Replacing the person at index 2 in the sublist with a person named "Jack" with ID 3016 
   	 *   No unexpected modifications in list order or list elements
 
-
       #Reserve branch marker
   #Added new tests
   	 
